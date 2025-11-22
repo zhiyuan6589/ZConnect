@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZConnect"
         mc:Ignorable="d"
-        Title="ZConnect" Height="500" Width="650">
+        Title="ZConnect" Height="500" Width="700">
     <Grid Margin="10" RowDefinitions="Auto,Auto,*,Auto">
         <!--Margin="10,10,10,10"-->
         <!--Margin="Left,Top,Right,Bottom"-->
@@ -19,11 +19,15 @@
             <Label Content="Port:" Margin="10 0 0 0"/>
             <TextBox Width="80" Margin="5 0" Text="{Binding Connection.RemotePort}"/>
             
-            <Label Content="Status:" Margin="10 0 0 0"/>
-            <TextBlock Text="{Binding ConnectionStatus}" FontFamily="Consolas" TextWrapping="Wrap"/>
+            <Label Content="ConnectionStatus:" Margin="10 0 0 0"/>
+            <TextBlock Text="{Binding IsConnected}" FontFamily="Consolas" TextWrapping="Wrap"/>
             
             <Button Content="Connect" Width="80" Margin="20 0" Click="Connect_Click"/>
             <Button Content="Disconnect" Width="80" Margin="5 0" Click="Disconnect_Click"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+            <Label Content="StatusMessage:" Margin="10 0 0 0"/>
+            <TextBlock Text="{Binding StatusMessage}" FontFamily="Consolas" TextWrapping="Wrap"/>
         </StackPanel>
 
         <GroupBox Header="ReceiveData" Grid.Row="1" Margin="0 20 0 0">

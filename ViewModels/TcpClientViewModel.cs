@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using ZConnect.Models;
 using ZConnect.Services;
+using ZConnect.Models.Events;
 
 namespace ZConnect.ViewModels
 {
@@ -22,11 +23,11 @@ namespace ZConnect.ViewModels
         private readonly TcpClientService _service = new TcpClientService();
         public TcpConnectionModel Connection => _service.Connection;    // Read-only property, equivalent to: get { return _service.Connect; }, the function to expose `read-only` access to _service.Connection.
 
-        private string _connectionStatus = "NotConnected";
-        public string ConnectionStatus
+        private bool _isConnected;
+        public bool IsConnected
         {
-            get => _connectionStatus;
-            set { _connectionStatus = value; OnPropertyChanged(); }
+            get => _isConnected;
+            set { _isConnected = value; OnPropertyChanged(); }
         }
 
         private string _receivedText = "";  // Private property, access and update through the public property ReceivedText.
@@ -43,23 +44,32 @@ namespace ZConnect.ViewModels
             set { _sendText = value; OnPropertyChanged(); }
         }
 
+        private string? _statusMessage = "";
+        public string? StatusMessage
+        {
+            get => _statusMessage;
+            set { _statusMessage = value; OnPropertyChanged(); }
+        }
+
         public TcpClientViewModel()
         {
-            _service.DataReceived += OnDataReceived;    // Event subscription (event_name += method_name). Whenever _service.DataReceived is called, the OnDataReceived method is automatically called.
-            _service.ConnectionStatus += OnConnectionStatus;
+            _service.StatusChanged += OnStatusChanged;  // Event subscription (event_name += method_name). Whenever _service.DataReceived is called, the OnDataReceived method is automatically called.
         }
 
-        private void OnDataReceived(byte[] data)
+        private void OnStatusChanged(object? sender, TcpStatusChangedEventArgs args)
         {
-            string text = Encoding.UTF8.GetString(data);
-            ReceivedText += $"[Recv {DateTime.Now:HH:mm:ss}] {text}\n";
-            OnPropertyChanged(nameof(ReceivedText));
-        }
+            if (args.StatusType == TcpStatusType.DataReceived && args.Data != null)
+            {
+                string text = Encoding.UTF8.GetString(args.Data);
+                ReceivedText += $"[Recv {DateTime.Now:HH:mm:ss}] {text}\n";
+            }
 
-        private void OnConnectionStatus(string status)
-        {
-            ConnectionStatus = status;
-            OnPropertyChanged(nameof(ConnectionStatus));
+            if (args.StatusType == TcpStatusType.Connected)
+                IsConnected = true;
+            else if (args.StatusType == TcpStatusType.Disconnected || args.StatusType == TcpStatusType.Error)
+                IsConnected = false;
+
+            StatusMessage = args.Message;
         }
 
         public async Task ConnectAsync()
@@ -75,13 +85,11 @@ namespace ZConnect.ViewModels
             await _service.SendAsync(data);
 
             ReceivedText += $"[Send {DateTime.Now:HH:mm:ss}] {SendText}\n"; // The recived/send text record.
-            SendText = "";
         }
 
         public void Disconnect()
         {
             _service.Disconnect();
-            OnPropertyChanged(nameof(ConnectionStatus));
         }
     }
 }
