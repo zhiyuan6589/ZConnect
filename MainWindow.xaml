@@ -5,8 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZConnect"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="ZConnect" Height="500" Width="650">
+    <Grid Margin="10" RowDefinitions="Auto,Auto,*,Auto">
+        <!--Margin="10,10,10,10"-->
+        <!--Margin="Left,Top,Right,Bottom"-->
+        <!--RowDefinitions: Auto:Height adaptable to content; *:Take up remaining space-->
+        <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+            <Label Content="IP:"/>
+            <!--Margin="5 0"-->
+            <!--Margin="Left&Right Top&Bottom"-->
+            <TextBox Width="120" Margin="5 0" Text="{Binding Connection.RemoteIp}"/>
+            <Label Content="Port:" Margin="10 0 0 0"/>
+            <TextBox Width="80" Margin="5 0" Text="{Binding Connection.RemotePort}"/>
+            <Button Content="Connect" Width="80" Margin="20 0" Click="Connect_Click"/>
+            <Button Content="Disconnect" Width="80" Margin="5 0" Click="Disconnect_Click"/>
+        </StackPanel>
 
+        <GroupBox Header="ReceiveData" Grid.Row="1" Margin="0 20 0 0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <TextBlock Text="{Binding ReceivedText}" FontFamily="Consolas" TextWrapping="Wrap"/>
+                <!--TextWrapping="Wrap": Automatically wrap text when it exceeds the width of the control-->
+            </ScrollViewer>
+        </GroupBox>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 10 0 0">
+            <TextBox Width="500" Height="30" Text="{Binding SendText}"/>
+            <Button Content="Send" Width="80" Margin="10 0 0 0" Click="Send_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
