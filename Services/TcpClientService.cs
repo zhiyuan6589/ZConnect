@@ -17,6 +17,7 @@ namespace ZConnect.Services
         private TcpClient? _client;
 
         public event Action<byte[]>? DataReceived;  // An event that can be subscribed to.
+        public event Action<string>? ConnectionStatus;
 
         public async Task ConnectAsync(string ip, int port)
         {
@@ -27,7 +28,7 @@ namespace ZConnect.Services
             Connection.RemotePort = port;
             Connection.IsConnected = true;
             Connection.LastActiveTime = DateTime.Now;
-
+            ConnectionStatus?.Invoke(Connection.IsConnected ? "Connected" : "NotConnected");
             _ = ReceiveAsync();
         }
 
@@ -69,6 +70,7 @@ namespace ZConnect.Services
         {
             _client?.Close();
             Connection.IsConnected = false;
+            ConnectionStatus?.Invoke(Connection.IsConnected ? "Connected" : "NotConnected");
         }
     }
 }

@@ -22,6 +22,13 @@ namespace ZConnect.ViewModels
         private readonly TcpClientService _service = new TcpClientService();
         public TcpConnectionModel Connection => _service.Connection;    // Read-only property, equivalent to: get { return _service.Connect; }, the function to expose `read-only` access to _service.Connection.
 
+        private string _connectionStatus = "NotConnected";
+        public string ConnectionStatus
+        {
+            get => _connectionStatus;
+            set { _connectionStatus = value; OnPropertyChanged(); }
+        }
+
         private string _receivedText = "";  // Private property, access and update through the public property ReceivedText.
         public string ReceivedText
         {
@@ -39,6 +46,7 @@ namespace ZConnect.ViewModels
         public TcpClientViewModel()
         {
             _service.DataReceived += OnDataReceived;    // Event subscription (event_name += method_name). Whenever _service.DataReceived is called, the OnDataReceived method is automatically called.
+            _service.ConnectionStatus += OnConnectionStatus;
         }
 
         private void OnDataReceived(byte[] data)
@@ -46,6 +54,12 @@ namespace ZConnect.ViewModels
             string text = Encoding.UTF8.GetString(data);
             ReceivedText += $"[Recv {DateTime.Now:HH:mm:ss}] {text}\n";
             OnPropertyChanged(nameof(ReceivedText));
+        }
+
+        private void OnConnectionStatus(string status)
+        {
+            ConnectionStatus = status;
+            OnPropertyChanged(nameof(ConnectionStatus));
         }
 
         public async Task ConnectAsync()
@@ -67,6 +81,7 @@ namespace ZConnect.ViewModels
         public void Disconnect()
         {
             _service.Disconnect();
+            OnPropertyChanged(nameof(ConnectionStatus));
         }
     }
 }
