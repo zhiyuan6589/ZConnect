@@ -90,7 +90,7 @@ namespace ZConnect.Services
                     else
                     {
                         Connection.IsConnected = false;
-                        NotifyStatus(TcpStatusType.Disconnected, "Connection closed by tcp server.");
+                        NotifyStatus(TcpStatusType.Disconnected, "Disconnected!");
                         break;
                     }
                 }

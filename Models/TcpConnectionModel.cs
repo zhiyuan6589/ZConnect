@@ -15,8 +15,8 @@ namespace ZConnect.Models
         public int LocalPort { get; set; }
 
         // Remote Info
-        public string? RemoteIp { get; set; }
-        public int RemotePort { get; set; }
+        public string? RemoteIp { get; set; } = "127.0.0.1";
+        public int RemotePort { get; set; } = 5000;
 
         // Status
         public bool IsConnected { get; set; }
