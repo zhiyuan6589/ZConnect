@@ -14,42 +14,10 @@
             <Label Content="IP:"/>
             <!--Margin="5 0"-->
             <!--Margin="Left&Right Top&Bottom"-->
-            <TextBox Width="70"
-                 Height="25"
-                 FontSize="12"
-                 Text="{Binding Connection.RemoteIp}">
-                <TextBox.Template>
-                    <ControlTemplate TargetType="TextBox">
-                        <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                            <Grid VerticalAlignment="Center">
-                                <ScrollViewer x:Name="PART_ContentHost"
-                                  Focusable="false" />
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </TextBox.Template>
-            </TextBox>
-            
+            <TextBox Width="70" Text="{Binding Connection.RemoteIp}" Style="{StaticResource VerticalCenterTextBox}"/>
+
             <Label Margin="20 0 0 0" Content="Port:"/>
-            <TextBox Width="40"
-                 Height="25"
-                 FontSize="12"
-                 Text="{Binding Connection.RemotePort}">
-                <TextBox.Template>
-                    <ControlTemplate TargetType="TextBox">
-                        <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                            <Grid VerticalAlignment="Center">
-                                <ScrollViewer x:Name="PART_ContentHost"
-                                    Focusable="false" />
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </TextBox.Template>
-            </TextBox>
+            <TextBox Width="40" Text="{Binding Connection.RemotePort}" Style="{StaticResource VerticalCenterTextBox}"/>
 
             <Label Margin="20 0 0 0" Content="ConnectionStatus:"/>
             <TextBlock Text="{Binding IsConnected}" VerticalAlignment="Center"/>
@@ -71,23 +39,7 @@
         </GroupBox>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5 5">
-            <TextBox Width="500"
-                 Height="30"
-                 FontSize="12"
-                 Text="{Binding SendText}">
-                <TextBox.Template>
-                    <ControlTemplate TargetType="TextBox">
-                        <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                            <Grid VerticalAlignment="Center">
-                                <ScrollViewer x:Name="PART_ContentHost"
-                                    Focusable="false" />
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </TextBox.Template>
-            </TextBox>
+            <TextBox Width="500" Text="{Binding SendText}" Style="{StaticResource VerticalCenterTextBox}"/>
             <Button Content="Send" Width="80" Margin="10 0 0 0" Click="Send_Click"/>
         </StackPanel>
     </Grid>
