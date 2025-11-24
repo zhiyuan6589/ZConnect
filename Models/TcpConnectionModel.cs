@@ -25,6 +25,5 @@ namespace ZConnect.Models
         public byte[]? LastSent { get; set; }
         public byte[]? LastReceived { get; set; }
         public DateTime LastActiveTime { get; set; }
-
     }
 }

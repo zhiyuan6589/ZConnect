@@ -38,5 +38,15 @@ namespace ZConnect
         {
             await _vm.SendAsync();
         }
+
+        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            var sv = sender as ScrollViewer;
+
+            if (e.ExtentHeightChange > 0)
+            {
+                sv?.ScrollToEnd();
+            }
+        }
     }
 }

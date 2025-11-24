@@ -85,7 +85,6 @@ namespace ZConnect.Services
                         Connection.LastActiveTime = DateTime.Now;
 
                         NotifyStatus(TcpStatusType.DataReceived, "Received data!", received);
-                        //DataReceived?.Invoke(received);
                     }
                     else
                     {
@@ -97,7 +96,7 @@ namespace ZConnect.Services
                 catch
                 {
                     Connection.IsConnected = false;
-                    NotifyStatus(TcpStatusType.Disconnected, "Connection lost!");
+                    NotifyStatus(TcpStatusType.Error, "Connection error!");
                     break;
                 }
             }

@@ -53,10 +53,10 @@ namespace ZConnect.ViewModels
 
         public TcpClientViewModel()
         {
-            _service.StatusChanged += OnStatusChanged;  // Event subscription (event_name += method_name). Whenever _service.DataReceived is called, the OnDataReceived method is automatically called.
+            _service.StatusChanged += OnStatusChanged;  // Event subscription (event_name += method_name). Whenever _service.StatusChanged is called, the OnStatusChanged method is automatically called.
         }
 
-        private void OnStatusChanged(object? sender, TcpStatusChangedEventArgs args)
+        private void OnStatusChanged(object? sender, TcpStatusChangedEventArgs args)    // sender is the object itself that triggered this time.
         {
             if (args.StatusType == TcpStatusType.DataReceived && args.Data != null)
             {
