@@ -6,7 +6,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Windows.Documents;
 using ZConnect.Models;
-using ZConnect.Models.Events;
 
 namespace ZConnect.Services
 {
@@ -33,14 +32,14 @@ namespace ZConnect.Services
                 Connection.IsConnected = true;
                 Connection.LastActiveTime = DateTime.Now;
 
-                NotifyStatus(TcpStatusType.Connected, "Connection successful!");
+                NotifyStatus(TcpStatusEnum.Connected, "Connection successful!");
 
                 _ = ReceiveAsync(); // Start an asynchronous task. The return value is ignored, and the asynchornous method does not need to wait for completion.
             } 
             catch
             {
                 Connection.IsConnected = false;
-                NotifyStatus(TcpStatusType.Error, "Connection error!");
+                NotifyStatus(TcpStatusEnum.Error, "Connection error!");
             }
         }
 
@@ -53,11 +52,11 @@ namespace ZConnect.Services
 
                 Connection.LastSent = data;
                 Connection.LastActiveTime = DateTime.Now;
-                NotifyStatus(TcpStatusType.DataSent, "Sent data!");
+                NotifyStatus(TcpStatusEnum.DataSent, "Sent data!");
             }
             catch
             {
-                NotifyStatus(TcpStatusType.Error, "Sent data failed!");
+                NotifyStatus(TcpStatusEnum.Error, "Sent data failed!");
             }
         }
 
@@ -84,19 +83,19 @@ namespace ZConnect.Services
                         Connection.LastReceived = received;
                         Connection.LastActiveTime = DateTime.Now;
 
-                        NotifyStatus(TcpStatusType.DataReceived, "Received data!", received);
+                        NotifyStatus(TcpStatusEnum.DataReceived, "Received data!", received);
                     }
                     else
                     {
                         Connection.IsConnected = false;
-                        NotifyStatus(TcpStatusType.Disconnected, "Disconnected!");
+                        NotifyStatus(TcpStatusEnum.Disconnected, "Disconnected!");
                         break;
                     }
                 }
                 catch
                 {
                     Connection.IsConnected = false;
-                    NotifyStatus(TcpStatusType.Error, "Connection error!");
+                    NotifyStatus(TcpStatusEnum.Error, "Connection error!");
                     break;
                 }
             }
@@ -106,10 +105,10 @@ namespace ZConnect.Services
         {
             _client?.Close();
             Connection.IsConnected = false;
-            NotifyStatus(TcpStatusType.Disconnected, "Disconnected!");
+            NotifyStatus(TcpStatusEnum.Disconnected, "Disconnected!");
         }
 
-        private void NotifyStatus(TcpStatusType statusType, string message, byte[]? data = null)
+        private void NotifyStatus(TcpStatusEnum statusType, string message, byte[]? data = null)
         {
             StatusChanged?.Invoke(this, new TcpStatusChangedEventArgs
             {

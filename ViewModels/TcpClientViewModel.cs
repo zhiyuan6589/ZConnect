@@ -1,11 +1,12 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.DirectoryServices.ActiveDirectory;
 using System.Runtime.CompilerServices;
 using System.Text;
 using ZConnect.Models;
 using ZConnect.Services;
-using ZConnect.Models.Events;
+using ZConnect.Utils;
 
 namespace ZConnect.ViewModels
 {
@@ -51,6 +52,10 @@ namespace ZConnect.ViewModels
             set { _statusMessage = value; OnPropertyChanged(); }
         }
 
+        public DataFormatEnum SendFormat { get; set; } = DataFormatEnum.String;
+
+        public DataFormatEnum ReceiveFormat { get; set; }
+
         public TcpClientViewModel()
         {
             _service.StatusChanged += OnStatusChanged;  // Event subscription (event_name += method_name). Whenever _service.StatusChanged is called, the OnStatusChanged method is automatically called.
@@ -58,15 +63,15 @@ namespace ZConnect.ViewModels
 
         private void OnStatusChanged(object? sender, TcpStatusChangedEventArgs args)    // sender is the object itself that triggered this time.
         {
-            if (args.StatusType == TcpStatusType.DataReceived && args.Data != null)
+            if (args.StatusType == TcpStatusEnum.DataReceived && args.Data != null)
             {
-                string text = Encoding.UTF8.GetString(args.Data);
+                string text = ConvertReceived(args.Data, ReceiveFormat);
                 ReceivedText += $"[Recv {DateTime.Now:HH:mm:ss}] {text}\n";
             }
 
-            if (args.StatusType == TcpStatusType.Connected)
+            if (args.StatusType == TcpStatusEnum.Connected)
                 IsConnected = true;
-            else if (args.StatusType == TcpStatusType.Disconnected || args.StatusType == TcpStatusType.Error)
+            else if (args.StatusType == TcpStatusEnum.Disconnected || args.StatusType == TcpStatusEnum.Error)
                 IsConnected = false;
 
             StatusMessage = args.Message;
@@ -81,15 +86,51 @@ namespace ZConnect.ViewModels
         {
             if (string.IsNullOrEmpty(SendText)) return;
 
-            byte[] data = Encoding.UTF8.GetBytes(SendText);
+            byte[] data = ConvertSend(SendText, SendFormat);
             await _service.SendAsync(data);
 
-            ReceivedText += $"[Send {DateTime.Now:HH:mm:ss}] {SendText}\n"; // The recived/send text record.
+            ReceivedText += $"[Send {DateTime.Now:HH:mm:ss}] {ConvertReceived(data, SendFormat)}\n"; // The recived/send text record.
         }
 
         public void Disconnect()
         {
             _service.Disconnect();
+        }
+
+        private byte[] ConvertSend(string input, DataFormatEnum format)
+        {
+            switch (format)
+            {
+                case DataFormatEnum.String:
+                    return Encoding.UTF8.GetBytes(input);
+
+                case DataFormatEnum.Hex:
+                    return FormatConverter.HexToBytes(input);
+
+                case DataFormatEnum.Ascii:
+                    return Encoding.ASCII.GetBytes(input);
+
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        private string ConvertReceived(byte[] data, DataFormatEnum format)
+        {
+            switch (format)
+            {
+                case DataFormatEnum.String:
+                    return Encoding.UTF8.GetString(data);
+
+                case DataFormatEnum.Hex:
+                    return FormatConverter.BytesToHex(data);
+
+                case DataFormatEnum.Ascii:
+                    return FormatConverter.BytesToAscii(data);
+
+                default:
+                    throw new NotSupportedException();
+            }
         }
     }
 }

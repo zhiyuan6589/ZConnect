@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ZConnect.Models.Events
-{
-    public class TcpStatusChangedEventArgs : EventArgs
-    {
-        public TcpStatusType StatusType { get; set; }
-        public string? Message { get; set; }
-        public byte[]? Data { get; set; }
-        public TcpConnectionModel? Connection { get; set; }
+namespace ZConnect.Models;
 
-    }
+public class TcpStatusChangedEventArgs : EventArgs
+{
+    public TcpStatusEnum StatusType { get; set; }
+    public string? Message { get; set; }
+    public byte[]? Data { get; set; }
+    public TcpConnectionModel? Connection { get; set; }
+
 }

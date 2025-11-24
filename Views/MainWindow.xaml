@@ -4,8 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZConnect"
+        xmlns:models="clr-namespace:ZConnect.Models"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="ZConnect" Height="500" Width="700">
+        Title="ZConnect" Height="500" Width="800">
+    <Window.Resources>
+        <ObjectDataProvider x:Key="DataFormatValues"
+                        MethodName="GetValues"
+                        ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:DataFormatEnum"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
     <Grid Margin="10" RowDefinitions="Auto,Auto,*,Auto">
         <!--Margin="10,10,10,10"-->
         <!--Margin="Left,Top,Right,Bottom"-->
@@ -27,7 +39,11 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="auto" Margin="5 5">
-            <Label Content="StatusMessage:"/>
+            <ComboBox Width="65" Margin="10 0 0 0"
+                      ItemsSource="{Binding Source={StaticResource DataFormatValues}}"
+                      SelectedItem="{Binding ReceiveFormat, Mode=TwoWay}"
+                      VerticalAlignment="Center"/>
+            <Label Content="StatusMessage:" Margin="30 0 0 0"/>
             <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center"/>
         </StackPanel>
 
@@ -39,7 +55,14 @@
         </GroupBox>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5 5">
+            <Label Content="Send:"/>
             <TextBox Width="500" Text="{Binding SendText}" Style="{StaticResource VerticalCenterTextBox}"/>
+
+            <ComboBox Width="65" Margin="10 0 0 0"
+                      ItemsSource="{Binding Source={StaticResource DataFormatValues}}"
+                      SelectedItem="{Binding SendFormat, Mode=TwoWay}"
+                      VerticalAlignment="Center"/>
+            
             <Button Content="Send" Width="80" Margin="10 0 0 0" Click="Send_Click"/>
         </StackPanel>
     </Grid>
