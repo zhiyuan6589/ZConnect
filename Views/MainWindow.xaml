@@ -7,7 +7,7 @@
         xmlns:models="clr-namespace:ZConnect.Models"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="ZConnect" Height="500" Width="800">
+        Title="ZConnect" Height="500" Width="900">
     <Window.Resources>
         <ObjectDataProvider x:Key="DataFormatValues"
                         MethodName="GetValues"
@@ -62,7 +62,9 @@
                       ItemsSource="{Binding Source={StaticResource DataFormatValues}}"
                       SelectedItem="{Binding SendFormat, Mode=TwoWay}"
                       VerticalAlignment="Center"/>
-            
+
+            <CheckBox Content="AutoSend" IsChecked="{Binding AutoSend, Mode=TwoWay}"></CheckBox>
+            <TextBox Width="50" Text="{Binding IntervalMs}"/>
             <Button Content="Send" Width="80" Margin="10 0 0 0" Click="Send_Click"/>
         </StackPanel>
     </Grid>

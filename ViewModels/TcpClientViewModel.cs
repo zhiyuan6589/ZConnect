@@ -56,6 +56,22 @@ namespace ZConnect.ViewModels
 
         public DataFormatEnum ReceiveFormat { get; set; }
 
+        private bool _autoSend = false;
+        public bool AutoSend
+        {
+            get => _autoSend;
+            set { _autoSend = value; OnPropertyChanged(); }
+        }
+
+        private bool _isAutoSending = false;
+
+        private int _intervalMs = 1000;
+        public int IntervalMs
+        {
+            get => _intervalMs;
+            set { _intervalMs = value; OnPropertyChanged(); }
+        }
+
         public TcpClientViewModel()
         {
             _service.StatusChanged += OnStatusChanged;  // Event subscription (event_name += method_name). Whenever _service.StatusChanged is called, the OnStatusChanged method is automatically called.
@@ -84,12 +100,19 @@ namespace ZConnect.ViewModels
 
         public async Task SendAsync()
         {
+            if (_isAutoSending) return;
             if (string.IsNullOrEmpty(SendText)) return;
-
             byte[] data = ConvertSend(SendText, SendFormat);
-            await _service.SendAsync(data);
 
-            ReceivedText += $"[Send {DateTime.Now:HH:mm:ss}] {ConvertReceived(data, SendFormat)}\n"; // The recived/send text record.
+            _isAutoSending = AutoSend;
+            do
+            {
+                await _service.SendAsync(data);
+                ReceivedText += $"[Send {DateTime.Now:HH:mm:ss}] {ConvertReceived(data, SendFormat)}\n";    // The recived/send text record.
+                if (!AutoSend || !Connection.IsConnected) break;
+                await Task.Delay(IntervalMs);
+            } while (AutoSend && (Connection.IsConnected));
+            _isAutoSending = false;
         }
 
         public void Disconnect()
@@ -99,38 +122,24 @@ namespace ZConnect.ViewModels
 
         private byte[] ConvertSend(string input, DataFormatEnum format)
         {
-            switch (format)
+            return format switch
             {
-                case DataFormatEnum.String:
-                    return Encoding.UTF8.GetBytes(input);
-
-                case DataFormatEnum.Hex:
-                    return FormatConverter.HexToBytes(input);
-
-                case DataFormatEnum.Ascii:
-                    return Encoding.ASCII.GetBytes(input);
-
-                default:
-                    throw new NotSupportedException();
-            }
+                DataFormatEnum.String => Encoding.UTF8.GetBytes(input),
+                DataFormatEnum.Hex => FormatConverter.HexToBytes(input),
+                DataFormatEnum.Ascii => Encoding.ASCII.GetBytes(input),
+                _ => throw new NotSupportedException(),
+            };
         }
 
         private string ConvertReceived(byte[] data, DataFormatEnum format)
         {
-            switch (format)
+            return format switch
             {
-                case DataFormatEnum.String:
-                    return Encoding.UTF8.GetString(data);
-
-                case DataFormatEnum.Hex:
-                    return FormatConverter.BytesToHex(data);
-
-                case DataFormatEnum.Ascii:
-                    return FormatConverter.BytesToAscii(data);
-
-                default:
-                    throw new NotSupportedException();
-            }
+                DataFormatEnum.String => Encoding.UTF8.GetString(data),
+                DataFormatEnum.Hex => FormatConverter.BytesToHex(data),
+                DataFormatEnum.Ascii => FormatConverter.BytesToAscii(data),
+                _ => throw new NotSupportedException(),
+            };
         }
     }
 }
