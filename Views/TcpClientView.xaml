@@ -43,10 +43,10 @@
                       ItemsSource="{Binding Source={StaticResource DataFormatValues}}"
                       SelectedItem="{Binding ReceiveFormat, Mode=TwoWay}"
                       VerticalAlignment="Center"/>
-            <Button Margin="20 0 0 0" Content="ClearText" Width="80" Click="ClearText_Click"></Button>
+            <Button Margin="20 0 0 0" Content="Clear" Width="80" Click="ClearText_Click"></Button>
         </StackPanel>
 
-        <GroupBox Header="ReceiveData:" Grid.Row="2" Margin="5 5">
+        <GroupBox Header="Receive:" Grid.Row="2" Margin="5 5">
             <ScrollViewer VerticalScrollBarVisibility="Auto" ScrollChanged="ScrollViewer_ScrollChanged">
                 <TextBlock Text="{Binding ReceivedText}" FontFamily="Consolas" TextWrapping="Wrap"/>
                 <!--TextWrapping="Wrap": Automatically wrap text when it exceeds the width of the control-->
