@@ -41,6 +41,11 @@ namespace ZConnect.Views
             await _vm.SendAsync();
         }
 
+        private void ClearText_Click(object sender, RoutedEventArgs e)
+        {
+            _vm.ClearText();
+        }
+
         private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             var sv = sender as ScrollViewer;

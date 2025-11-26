@@ -43,6 +43,7 @@
                       ItemsSource="{Binding Source={StaticResource DataFormatValues}}"
                       SelectedItem="{Binding ReceiveFormat, Mode=TwoWay}"
                       VerticalAlignment="Center"/>
+            <Button Margin="20 0 0 0" Content="ClearText" Width="80" Click="ClearText_Click"></Button>
             <Label Content="StatusMessage:" Margin="30 0 0 0"/>
             <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center"/>
         </StackPanel>

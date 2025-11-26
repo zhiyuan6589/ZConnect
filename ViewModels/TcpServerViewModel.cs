@@ -132,6 +132,11 @@ namespace ZConnect.ViewModels
             _isAutoSending = false;
         }
 
+        public void ClearText()
+        {
+            ReceivedText = "";
+        }
+
         public void Stop()
         {
             _service.Stop();
