@@ -5,7 +5,7 @@ This is a device connection debuging tool. Developed using .NET, C# and WPF. Key
 `.NET 10`, `C# 14`
 
 # Features
-- [ ] TCP  
+- TCP  
 - [ ] UDP
 - [ ] Serial
 - [ ] Modbus TCP/RTU

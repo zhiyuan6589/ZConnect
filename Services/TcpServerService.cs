@@ -17,10 +17,10 @@ namespace ZConnect.Services
 
         public async Task StartAsync(string ip, int port)
         {
-            IPAddress localAddr = IPAddress.Parse(ip);
-            _server = new TcpListener(localAddr, port);
             try
             {
+                IPAddress localAddr = IPAddress.Parse(ip);
+                _server = new TcpListener(localAddr, port);
                 _server.Start();
 
                 Connection.LocalIp = ip;
@@ -29,15 +29,16 @@ namespace ZConnect.Services
                 Connection.IsConnected = false;
                 Connection.LastActiveTime = DateTime.Now;
 
-                NotifyStatus(TcpStatusEnum.Listening, "Listening!");
+                NotifyStatus(TcpStatusEnum.Listening);
 
                 _ = ListenerAsync();
             }
             catch
             {
+                _server?.Stop();
                 Connection.IsListening = false;
                 Connection.IsConnected = false;
-                NotifyStatus(TcpStatusEnum.NotListening, "Not listening!");
+                NotifyStatus(TcpStatusEnum.NotListening);
             }
         }
 
@@ -47,7 +48,7 @@ namespace ZConnect.Services
             {
                 _client = await _server!.AcceptTcpClientAsync();
                 Connection.IsConnected = true;
-                NotifyStatus(TcpStatusEnum.Connected, "Connected!");
+                NotifyStatus(TcpStatusEnum.Connected);
 
                 var buffer = new byte[1024];
                 var stream = _client.GetStream();
@@ -61,7 +62,7 @@ namespace ZConnect.Services
                         if (dataLength == 0)
                         {
                             Connection.IsConnected = false;
-                            NotifyStatus(TcpStatusEnum.Disconnected, "Disconnected!");
+                            NotifyStatus(TcpStatusEnum.Disconnected);
                             break;
                         }
 
@@ -71,7 +72,7 @@ namespace ZConnect.Services
                         Connection.LastReceived = received;
                         Connection.LastActiveTime = DateTime.Now;
 
-                        NotifyStatus(TcpStatusEnum.DataReceived, "Received data!", received);
+                        NotifyStatus(TcpStatusEnum.DataReceived, received);
                     }
                     catch
                     {
@@ -91,11 +92,11 @@ namespace ZConnect.Services
 
                 Connection.LastSent = data;
                 Connection.LastActiveTime = DateTime.Now;
-                NotifyStatus(TcpStatusEnum.DataSent, "Sent data!");
+                NotifyStatus(TcpStatusEnum.DataSent);
             }
             catch
             {
-                NotifyStatus(TcpStatusEnum.Error, "Sent data failed!");
+                NotifyStatus(TcpStatusEnum.Error);
             }
         }
 
@@ -104,15 +105,14 @@ namespace ZConnect.Services
             _server?.Stop();
             Connection.IsConnected = false;
             Connection.IsListening = false;
-            NotifyStatus(TcpStatusEnum.NotListening, "NotListening!");
+            NotifyStatus(TcpStatusEnum.NotListening);
         }
 
-        private void NotifyStatus(TcpStatusEnum statusType, string message, byte[]? data = null)
+        private void NotifyStatus(TcpStatusEnum statusType, byte[]? data = null)
         {
             StatusChanged?.Invoke(this, new TcpStatusChangedEventArgs
             {
                 StatusType = statusType,
-                Message = message,
                 Data = data,
                 Connection = Connection
             });

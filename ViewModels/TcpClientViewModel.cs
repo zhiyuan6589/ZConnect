@@ -24,11 +24,11 @@ namespace ZConnect.ViewModels
         private readonly TcpClientService _service = new TcpClientService();
         public TcpConnectionModel Connection => _service.Connection;    // Read-only property, equivalent to: get { return _service.Connect; }, the function to expose `read-only` access to _service.Connection.
 
-        private bool _isConnected;
-        public bool IsConnected
+        private string _tcpStatus;
+        public string TcpStatus
         {
-            get => _isConnected;
-            set { _isConnected = value; OnPropertyChanged(); }
+            get => _tcpStatus;
+            set { _tcpStatus = value; OnPropertyChanged(); }
         }
 
         private string _receivedText = "";  // Private property, access and update through the public property ReceivedText.
@@ -43,13 +43,6 @@ namespace ZConnect.ViewModels
         {
             get => _sendText;
             set { _sendText = value; OnPropertyChanged(); }
-        }
-
-        private string? _statusMessage = "";
-        public string? StatusMessage
-        {
-            get => _statusMessage;
-            set { _statusMessage = value; OnPropertyChanged(); }
         }
 
         public DataFormatEnum SendFormat { get; set; } = DataFormatEnum.String;
@@ -85,12 +78,27 @@ namespace ZConnect.ViewModels
                 ReceivedText += $"[Recv {DateTime.Now:HH:mm:ss}] {text}\n";
             }
 
-            if (args.StatusType == TcpStatusEnum.Connected)
-                IsConnected = true;
-            else if (args.StatusType == TcpStatusEnum.Disconnected || args.StatusType == TcpStatusEnum.Error)
-                IsConnected = false;
-
-            StatusMessage = args.Message;
+            switch (args.StatusType)
+            {
+                case TcpStatusEnum.Connected:
+                    TcpStatus = "Connected";
+                    break;
+                case TcpStatusEnum.Disconnected:
+                    TcpStatus = "Disconnected";
+                    break;
+                case TcpStatusEnum.DataReceived:
+                    TcpStatus = "DataReceived";
+                    break;
+                case TcpStatusEnum.DataSent:
+                    TcpStatus = "DataSent";
+                    break;
+                case TcpStatusEnum.Error:
+                    TcpStatus = "Error";
+                    break;
+                default:
+                    TcpStatus = "Disconnected";
+                    break;
+            }
         }
 
         public async Task ConnectAsync()

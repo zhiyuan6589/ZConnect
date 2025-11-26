@@ -40,13 +40,6 @@ namespace ZConnect.ViewModels
             set { _sendText = value; OnPropertyChanged(); }
         }
 
-        private string? _statusMessage = "";
-        public string? StatusMessage
-        {
-            get => _statusMessage;
-            set { _statusMessage = value; OnPropertyChanged(); }
-        }
-
         public DataFormatEnum SendFormat { get; set; } = DataFormatEnum.String;
 
         public DataFormatEnum ReceiveFormat { get; set; }
@@ -104,10 +97,9 @@ namespace ZConnect.ViewModels
                     TcpStatus = "Error";
                     break;
                 default:
+                    TcpStatus = "NotListening";
                     break;
             }
-
-            StatusMessage = args.Message;
         }
 
         public async Task StartAsync()

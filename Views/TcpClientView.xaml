@@ -31,11 +31,11 @@
             <Label Margin="20 0 0 0" Content="Remote Port:"/>
             <TextBox Width="40" Text="{Binding Connection.RemotePort}" Style="{StaticResource VerticalCenterTextBox}"/>
 
-            <Label Margin="20 0 0 0" Content="ConnectionStatus:"/>
-            <TextBlock Text="{Binding IsConnected}" VerticalAlignment="Center"/>
-
             <Button Margin="20 0 0 0" Content="Connect" Width="80" Click="Connect_Click"/>
             <Button Margin="20 0 0 0" Content="Disconnect" Width="80" Click="Disconnect_Click"/>
+
+            <Label Margin="20 0 0 0" Content="TcpStatus:"/>
+            <TextBlock Text="{Binding TcpStatus}" VerticalAlignment="Center"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="auto" Margin="5 5">
@@ -44,8 +44,6 @@
                       SelectedItem="{Binding ReceiveFormat, Mode=TwoWay}"
                       VerticalAlignment="Center"/>
             <Button Margin="20 0 0 0" Content="ClearText" Width="80" Click="ClearText_Click"></Button>
-            <Label Content="StatusMessage:" Margin="30 0 0 0"/>
-            <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center"/>
         </StackPanel>
 
         <GroupBox Header="ReceiveData:" Grid.Row="2" Margin="5 5">

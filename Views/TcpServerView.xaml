@@ -31,11 +31,11 @@
             <Label Margin="20 0 0 0" Content="Local Port:"/>
             <TextBox Width="40" Text="{Binding Connection.LocalPort}" Style="{StaticResource VerticalCenterTextBox}"/>
 
+            <Button Margin="20 0 0 0" Content="Listen" Width="80" Click="Start_Click"/>
+            <Button Margin="20 0 0 0" Content="Stop" Width="80" Click="Stop_Click"/>
+            
             <Label Margin="20 0 0 0" Content="TcpStatus:"/>
             <TextBlock Text="{Binding TcpStatus}" VerticalAlignment="Center"/>
-
-            <Button Margin="20 0 0 0" Content="Start" Width="80" Click="Start_Click"/>
-            <Button Margin="20 0 0 0" Content="Stop" Width="80" Click="Stop_Click"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="auto" Margin="5 5">
@@ -44,8 +44,6 @@
                       SelectedItem="{Binding ReceiveFormat, Mode=TwoWay}"
                       VerticalAlignment="Center"/>
             <Button Margin="20 0 0 0" Content="ClearText" Width="80" Click="ClearText_Click"></Button>
-            <Label Content="StatusMessage:" Margin="30 0 0 0"/>
-            <TextBlock Text="{Binding StatusMessage}" VerticalAlignment="Center"/>
         </StackPanel>
 
         <GroupBox Header="ReceiveData:" Grid.Row="2" Margin="5 5">
