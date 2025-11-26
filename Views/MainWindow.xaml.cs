@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ZConnect.ViewModels;
+using ZConnect.Views;
 
 namespace ZConnect
 {
@@ -17,36 +18,22 @@ namespace ZConnect
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly TcpClientViewModel _vm = new TcpClientViewModel();
         public MainWindow()
         {
-            InitializeComponent();  // Load the UI defined by the XMAL file, initialize the control object, set control object properties, event binding, etc.
-            DataContext = _vm;  // Context object for data binding in WPF
+            InitializeComponent();
+            MainContent.Content = FindResource("TcpServerView");
         }
 
-        private async void Connect_Click(object sender, RoutedEventArgs e)  // object sender: The control object that triggered the event (button here); RoutedEventArgs: Event parameters, including event-related information (such as routing, source, etc.)
+        private void ShowTcpClient(object sender, RoutedEventArgs e)
         {
-            await _vm.ConnectAsync();
+            MainContent.Content = FindResource("TcpClientView");
         }
 
-        private void Disconnect_Click(object sender, RoutedEventArgs e)
+        private void ShowTcpServer(object sender, RoutedEventArgs e)
         {
-            _vm.Disconnect();
+            MainContent.Content = FindResource("TcpServerView");
         }
 
-        private async void Send_Click(object sender, RoutedEventArgs e)
-        {
-            await _vm.SendAsync();
-        }
-
-        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            var sv = sender as ScrollViewer;
-
-            if (e.ExtentHeightChange > 0)
-            {
-                sv?.ScrollToEnd();
-            }
-        }
+        
     }
 }

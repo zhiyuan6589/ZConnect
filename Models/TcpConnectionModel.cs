@@ -11,8 +11,8 @@ namespace ZConnect.Models
     public class TcpConnectionModel
     {
         // Local Info
-        public string? LocalIp { get; set; }
-        public int LocalPort { get; set; }
+        public string? LocalIp { get; set; } = "127.0.0.1";
+        public int LocalPort { get; set; } = 5000;
 
         // Remote Info
         public string? RemoteIp { get; set; } = "127.0.0.1";
@@ -20,6 +20,7 @@ namespace ZConnect.Models
 
         // Status
         public bool IsConnected { get; set; }
+        public bool IsListening { get; set; }
 
         // Sent/Recived Data
         public byte[]? LastSent { get; set; }
