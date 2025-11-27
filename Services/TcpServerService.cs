@@ -4,24 +4,31 @@ using System.Text;
 using System.Net.Sockets;
 using ZConnect.Models;
 using System.Net;
+using ZConnect.ViewModels;
 
 namespace ZConnect.Services
 {
-    public class TcpServerService
+    /// <summary>
+    /// Tcp server service.
+    /// Handle tcp server connection/disconnection, send/receive data operations.
+    /// </summary>
+    public class TcpServerService : ITcpServiec
     {
-        public TcpConnectionModel Connection { get; private set; } = new TcpConnectionModel();
-        private TcpListener? _server;
-        private TcpClient? _client;
+        public TcpConnectionModel Connection { get; } = new();
 
-        public event EventHandler<TcpStatusChangedEventArgs>? StatusChanged;
+        public event EventHandler<TcpStatusChangedEventArgs>? StatusChanged;    // An event that can be subscribed to.
+
+        private TcpListener? _listener;
+
+        private TcpClient? _client;
 
         public async Task StartAsync(string ip, int port)
         {
             try
             {
                 IPAddress localAddr = IPAddress.Parse(ip);
-                _server = new TcpListener(localAddr, port);
-                _server.Start();
+                _listener = new TcpListener(localAddr, port);
+                _listener.Start();
 
                 Connection.LocalIp = ip;
                 Connection.LocalPort = port;
@@ -35,7 +42,7 @@ namespace ZConnect.Services
             }
             catch
             {
-                _server?.Stop();
+                _listener?.Stop();
                 Connection.IsListening = false;
                 Connection.IsConnected = false;
                 NotifyStatus(TcpStatusEnum.NotListening);
@@ -46,7 +53,7 @@ namespace ZConnect.Services
         {
             while (true)
             {
-                _client = await _server!.AcceptTcpClientAsync();
+                _client = await _listener!.AcceptTcpClientAsync();
                 Connection.IsConnected = true;
                 NotifyStatus(TcpStatusEnum.Connected);
 
@@ -71,7 +78,6 @@ namespace ZConnect.Services
 
                         Connection.LastReceived = received;
                         Connection.LastActiveTime = DateTime.Now;
-
                         NotifyStatus(TcpStatusEnum.DataReceived, received);
                     }
                     catch
@@ -102,13 +108,13 @@ namespace ZConnect.Services
 
         public void Stop()
         {
-            _server?.Stop();
+            _listener?.Stop();
             Connection.IsConnected = false;
             Connection.IsListening = false;
             NotifyStatus(TcpStatusEnum.NotListening);
         }
 
-        private void NotifyStatus(TcpStatusEnum statusType, byte[]? data = null)
+        public void NotifyStatus(TcpStatusEnum statusType, byte[]? data = null)
         {
             StatusChanged?.Invoke(this, new TcpStatusChangedEventArgs
             {

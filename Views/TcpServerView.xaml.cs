@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ZConnect.Services;
 using ZConnect.ViewModels;
 
 namespace ZConnect.Views
@@ -19,7 +20,7 @@ namespace ZConnect.Views
     /// </summary>
     public partial class TcpServerView : UserControl
     {
-        private readonly TcpServerViewModel _vm = new TcpServerViewModel();
+        private readonly TcpServerViewModel _vm = new(new TcpServerService());
         public TcpServerView()
         {
             InitializeComponent();

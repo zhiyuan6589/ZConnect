@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics.Eventing.Reader;
 using System.Net.Sockets;
 using System.Text;
 using System.Windows.Documents;
 using ZConnect.Models;
+using ZConnect.ViewModels;
 
 namespace ZConnect.Services
 {
@@ -13,12 +12,13 @@ namespace ZConnect.Services
     /// Tcp client service.
     /// Handle tcp client connection/disconnection, send/receive data operations.
     /// </summary>
-    public class TcpClientService
+    public class TcpClientService : ITcpServiec
     {
-        public TcpConnectionModel Connection { get; private set; } = new TcpConnectionModel();
-        private TcpClient? _client;
+        public TcpConnectionModel Connection { get; } = new();
 
         public event EventHandler<TcpStatusChangedEventArgs>? StatusChanged;    // An event that can be subscribed to.
+
+        private TcpClient? _client;
 
         public async Task ConnectAsync(string ip, int port)
         {
@@ -38,25 +38,9 @@ namespace ZConnect.Services
             } 
             catch
             {
+                _client?.Close();
                 Connection.IsConnected = false;
                 NotifyStatus(TcpStatusEnum.Disconnected);
-            }
-        }
-
-        public async Task SendAsync(byte[] data)
-        {
-            if (_client?.Connected != true) return;
-            try
-            {
-                await _client.GetStream().WriteAsync(data);
-
-                Connection.LastSent = data;
-                Connection.LastActiveTime = DateTime.Now;
-                NotifyStatus(TcpStatusEnum.DataSent);
-            }
-            catch
-            {
-                NotifyStatus(TcpStatusEnum.Error);
             }
         }
 
@@ -81,7 +65,6 @@ namespace ZConnect.Services
 
                         Connection.LastReceived = received;
                         Connection.LastActiveTime = DateTime.Now;
-
                         NotifyStatus(TcpStatusEnum.DataReceived, received);
                     }
                     else
@@ -100,6 +83,23 @@ namespace ZConnect.Services
             }
         }
 
+        public async Task SendAsync(byte[] data)
+        {
+            if (_client?.Connected != true) return;
+            try
+            {
+                await _client.GetStream().WriteAsync(data);
+
+                Connection.LastSent = data;
+                Connection.LastActiveTime = DateTime.Now;
+                NotifyStatus(TcpStatusEnum.DataSent);
+            }
+            catch
+            {
+                NotifyStatus(TcpStatusEnum.Error);
+            }
+        }
+
         public void Disconnect()
         {
             _client?.Close();
@@ -107,7 +107,7 @@ namespace ZConnect.Services
             NotifyStatus(TcpStatusEnum.Disconnected);
         }
 
-        private void NotifyStatus(TcpStatusEnum statusType, byte[]? data = null)
+        public void NotifyStatus(TcpStatusEnum statusType, byte[]? data = null)
         {
             StatusChanged?.Invoke(this, new TcpStatusChangedEventArgs
             {

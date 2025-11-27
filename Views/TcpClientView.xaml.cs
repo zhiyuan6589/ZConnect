@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ZConnect.Services;
 using ZConnect.ViewModels;
 
 namespace ZConnect.Views
@@ -19,7 +20,7 @@ namespace ZConnect.Views
     /// </summary>
     public partial class TcpClientView : UserControl
     {
-        private readonly TcpClientViewModel _vm = new TcpClientViewModel();
+        private readonly TcpClientViewModel _vm = new(new TcpClientService());
         public TcpClientView()
         {
             InitializeComponent();  // Load the UI defined by the XMAL file, initialize the control object, set control object properties, event binding, etc.
