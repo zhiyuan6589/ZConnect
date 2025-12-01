@@ -34,6 +34,11 @@ namespace ZConnect
             MainContent.Content = FindResource("TcpServerView");
         }
 
+        private void ShowUdpClient(object sender, RoutedEventArgs e)
+        {
+            MainContent.Content = FindResource("UdpClientView");
+        }
+
         
     }
 }

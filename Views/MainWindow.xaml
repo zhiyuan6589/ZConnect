@@ -9,12 +9,14 @@
     <Window.Resources>
         <local:TcpClientView x:Key="TcpClientView"/>
         <local:TcpServerView x:Key="TcpServerView"/>
+        <local:UdpClientView x:Key="UdpClientView"/>
     </Window.Resources>
 
     <DockPanel>
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
             <Button Content="TCP Server" Click="ShowTcpServer"/>
             <Button Content="TCP Client" Click="ShowTcpClient"/>
+            <Button Content="UDP Client" Click="ShowUdpClient"/>
         </StackPanel>
         <ContentControl x:Name="MainContent"/>
     </DockPanel>

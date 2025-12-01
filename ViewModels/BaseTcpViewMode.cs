@@ -73,7 +73,7 @@ namespace ZConnect.ViewModels
         {
             if (args.StatusType == TcpStatusEnum.DataReceived && args.Data != null)
             {
-                string text = ConvertReceived(args.Data, ReceiveFormat);
+                string text = FormatConverter.ConvertReceived(args.Data, ReceiveFormat);
                 ReceivedText += $"[Recv {DateTime.Now:HH:mm:ss}] {text}\n";
             }
 
@@ -84,13 +84,14 @@ namespace ZConnect.ViewModels
         {
             if (_isAutoSending) return;
             if (string.IsNullOrEmpty(SendText)) return;
-            byte[] data = ConvertSend(SendText, SendFormat);
+
+            byte[] data = FormatConverter.ConvertSend(SendText, SendFormat);
 
             _isAutoSending = AutoSend;
             do
             {
                 await _service.SendAsync(data);
-                ReceivedText += $"[Send {DateTime.Now:HH:mm:ss}] {ConvertReceived(data, SendFormat)}\n";    // The recived/send text record.
+                ReceivedText += $"[Send {DateTime.Now:HH:mm:ss}] {FormatConverter.ConvertReceived(data, SendFormat)}\n";    // The recived/send text record.
                 if (!AutoSend || !Connection.IsConnected) break;
                 await Task.Delay(IntervalMs);
             } while (AutoSend && (Connection.IsConnected));
@@ -100,28 +101,6 @@ namespace ZConnect.ViewModels
         public void ClearText()
         {
             ReceivedText = "";
-        }
-
-        protected byte[] ConvertSend(string input, DataFormatEnum format)
-        {
-            return format switch
-            {
-                DataFormatEnum.String => Encoding.UTF8.GetBytes(input),
-                DataFormatEnum.Hex => FormatConverter.HexToBytes(input),
-                DataFormatEnum.Ascii => Encoding.ASCII.GetBytes(input),
-                _ => throw new NotSupportedException(),
-            };
-        }
-
-        protected string ConvertReceived(byte[] data, DataFormatEnum format)
-        {
-            return format switch
-            {
-                DataFormatEnum.String => Encoding.UTF8.GetString(data),
-                DataFormatEnum.Hex => FormatConverter.BytesToHex(data),
-                DataFormatEnum.Ascii => FormatConverter.BytesToAscii(data),
-                _ => throw new NotSupportedException(),
-            };
         }
     }
 }

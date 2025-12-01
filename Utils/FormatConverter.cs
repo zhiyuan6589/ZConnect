@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ZConnect.Models;
 
 namespace ZConnect.Utils
 {
@@ -40,6 +41,28 @@ namespace ZConnect.Utils
             }
 
             return chars.ToString();
+        }
+
+        public static byte[] ConvertSend(string input, DataFormatEnum format)
+        {
+            return format switch
+            {
+                DataFormatEnum.String => Encoding.UTF8.GetBytes(input),
+                DataFormatEnum.Hex => FormatConverter.HexToBytes(input),
+                DataFormatEnum.Ascii => Encoding.ASCII.GetBytes(input),
+                _ => throw new NotSupportedException(),
+            };
+        }
+
+        public static string ConvertReceived(byte[] data, DataFormatEnum format)
+        {
+            return format switch
+            {
+                DataFormatEnum.String => Encoding.UTF8.GetString(data),
+                DataFormatEnum.Hex => FormatConverter.BytesToHex(data),
+                DataFormatEnum.Ascii => FormatConverter.BytesToAscii(data),
+                _ => throw new NotSupportedException(),
+            };
         }
     }
 }
