@@ -16,19 +16,19 @@ namespace ZConnect.Views
             DataContext = _vm;
         }
 
-        private void Open_Click(object sender, RoutedEventArgs e)
+        private void Start_Click(object sender, RoutedEventArgs e)
         {
             _vm.Open();
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e)
+        private void Stop_Click(object sender, RoutedEventArgs e)
         {
             _vm.Close();
         }
 
-        private async void Write_Click(object sender, RoutedEventArgs e)
+        private async void Send_Click(object sender, RoutedEventArgs e)
         {
-            await _vm.WriteAsync();
+            await _vm.SendAsync();
         }
 
         private void ClearText_Click(object sender, RoutedEventArgs e)

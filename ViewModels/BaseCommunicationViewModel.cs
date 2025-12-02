@@ -5,30 +5,19 @@ using ZConnect.Utils;
 
 namespace ZConnect.ViewModels
 {
-    /// <summary>
-    /// Tcp ViewModel base class.
-    /// </summary>
-    public abstract class BaseTcpViewMode : INotifyPropertyChanged    // Interface that notifies the UI that "a certain property has changed."
+    public class BaseCommunicationViewModel : INotifyPropertyChanged    // Interface that notifies the UI that "a certain property has changed."
     {
-        // MVVM Mode
         public event PropertyChangedEventHandler? PropertyChanged;  // Events are emitted by ViewModel, the UI automatically subscribes to the event through data binding.
         protected void OnPropertyChanged([CallerMemberName] string? name = null)  // [CallerMemberName] is a syntactic sugar for C#, it will automatically pass in the property name that calls the method.
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
-        protected readonly ITcpServiec _service;    // Any object that implements the ITcpService interface (TcpClientService or TcpServerService).
+        protected Func<byte[], Task>? SendAction;   // C# 内置的委托类型，Func<byte[], Task> 表示接收 byte[] 类型的参数， 返回 Task 方法，简言之是一个可以异步调用的函数
 
-        public BaseTcpViewMode(ITcpServiec service)
+        private string _status = "None";
+        public string Status
         {
-            _service = service;
-        }
-
-        public TcpConnectionModel Connection => _service.Connection;   // Read-only property, equivalent to: get { return _service.Connect; }, the function to expose `read-only` access to _service.Connection.
-
-        private string _tcpStatus = "DisConnection";
-        public string TcpStatus
-        {
-            get => _tcpStatus;
-            set { _tcpStatus = value; OnPropertyChanged(); }
+            get => _status;
+            set { _status = value; OnPropertyChanged(); }
         }
 
         private string _receivedText = "";  // Private property, access and update through the public property ReceivedText.
@@ -64,38 +53,38 @@ namespace ZConnect.ViewModels
             set { _intervalMs = value; OnPropertyChanged(); }
         }
 
-        protected void OnStatusChanged(object? sender, TcpStatusChangedEventArgs args)
+        public void ClearText()
         {
-            if (args.StatusType == TcpStatusEnum.DataReceived && args.Data != null)
-            {
-                string text = FormatConverter.ConvertReceived(args.Data, ReceiveFormat);
-                ReceivedText += $"[Recv {DateTime.Now:HH:mm:ss}] {text}\n";
-            }
-
-            TcpStatus = args.StatusType.ToString();
+            ReceivedText = "";
         }
 
         public async Task SendAsync()
         {
-            if (_isAutoSending) return;
-            if (string.IsNullOrEmpty(SendText)) return;
+            if (_isAutoSending || string.IsNullOrEmpty(SendText)) return;
 
             byte[] data = FormatConverter.ConvertSend(SendText, SendFormat);
 
             _isAutoSending = AutoSend;
             do
             {
-                await _service.SendAsync(data);
+                if (SendAction != null) await SendAction(data);
+
                 ReceivedText += $"[Send {DateTime.Now:HH:mm:ss}] {FormatConverter.ConvertReceived(data, SendFormat)}\n";    // The recived/send text record.
-                if (!AutoSend || !Connection.IsConnected) break;
-                await Task.Delay(IntervalMs);
-            } while (AutoSend && (Connection.IsConnected));
+                if (!AutoSend) break;
+                await Task.Delay(IntervalMs).ConfigureAwait(false);
+            } while (AutoSend);
             _isAutoSending = false;
         }
 
-        public void ClearText()
+        protected void OnStatusChanged(object? sender, ICommunicationStatus args)
         {
-            ReceivedText = "";
+            if (args.Data != null)
+            {
+                string text = FormatConverter.ConvertReceived(args.Data, ReceiveFormat);
+                ReceivedText += $"[Recv {DateTime.Now:HH:mm:ss}] {text}\n";
+            }
+
+            Status = args.StatusType.ToString();
         }
     }
 }

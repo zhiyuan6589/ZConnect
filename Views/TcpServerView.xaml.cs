@@ -10,7 +10,7 @@ namespace ZConnect.Views
     /// </summary>
     public partial class TcpServerView : UserControl
     {
-        private readonly TcpServerViewModel _vm = new(new TcpServerService());
+        private readonly TcpServerViewModel _vm = new();
         public TcpServerView()
         {
             InitializeComponent();

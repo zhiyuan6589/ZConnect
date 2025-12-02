@@ -55,11 +55,11 @@
                        ItemsSource="{Binding HandshakeValues}"
                        SelectedItem="{Binding Connection.Handshake, Mode=TwoWay}"/>
 
-            <Button Margin="20 0 0 0" Content="Open" Width="80" Click="Open_Click"/>
-            <Button Margin="20 0 0 0" Content="Close" Width="80" Click="Close_Click"/>
+            <Button Margin="20 0 0 0" Content="Open" Width="80" Click="Start_Click"/>
+            <Button Margin="20 0 0 0" Content="Close" Width="80" Click="Stop_Click"/>
 
-            <Label Margin="20 0 0 0" Content="SerialPortStatus:"/>
-            <TextBlock Text="{Binding SerialPortStatus}" VerticalAlignment="Center"/>
+            <Label Margin="20 0 0 0" Content="Status:"/>
+            <TextBlock Text="{Binding Status}" VerticalAlignment="Center"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="auto" Margin="5 5">
@@ -87,7 +87,7 @@
 
             <CheckBox Content="AutoSend" IsChecked="{Binding AutoSend, Mode=TwoWay}"></CheckBox>
             <TextBox Width="50" Text="{Binding IntervalMs}"/>
-            <Button Content="Send" Width="80" Margin="10 0 0 0" Click="Write_Click"/>
+            <Button Content="Send" Width="80" Margin="10 0 0 0" Click="Send_Click"/>
         </StackPanel>
     </Grid>
 </UserControl>

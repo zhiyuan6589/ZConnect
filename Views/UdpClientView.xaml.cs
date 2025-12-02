@@ -16,12 +16,12 @@ namespace ZConnect.Views
             DataContext = _vm;
         }
 
-        private void Connect_Click(object sender, RoutedEventArgs e)  // object sender: The control object that triggered the event (button here); RoutedEventArgs: Event parameters, including event-related information (such as routing, source, etc.)
+        private void Start_Click(object sender, RoutedEventArgs e)  // object sender: The control object that triggered the event (button here); RoutedEventArgs: Event parameters, including event-related information (such as routing, source, etc.)
         {
             _vm.Connect();
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e)
+        private void Stop_Click(object sender, RoutedEventArgs e)
         {
             _vm.Close();
         }

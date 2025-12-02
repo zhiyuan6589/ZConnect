@@ -74,7 +74,7 @@ namespace ZConnect.Services
             }
         }
 
-        public async Task WriteAsync(byte[] data)
+        public async Task SendAsync(byte[] data)
         {
             if (_serialPort != null)
             {

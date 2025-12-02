@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+using ZConnect.Models;
 using ZConnect.Services;
+using ZConnect.Utils;
 
 namespace ZConnect.ViewModels
 {
@@ -7,27 +9,33 @@ namespace ZConnect.ViewModels
     /// Tcp service ViewModel.
     /// Used to bind logic to UI.
     /// </summary>
-    public class TcpServerViewModel : BaseTcpViewMode
+    public class TcpServerViewModel : BaseCommunicationViewModel
     {
-        public TcpServerViewModel(TcpServerService service) : base(service)
+        private readonly TcpServerService _service = new();
+
+        public TcpConnectionModel Connection => _service.Connection;
+
+        public TcpServerViewModel()
         {
-            service.StatusChanged += (s, e) =>
+            SendAction = _service.SendAsync;
+            _service.StatusChanged += (s, e) =>
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    OnStatusChanged(s, e);
+                    OnStatusChanged(s, e as ICommunicationStatus);
                 });
             };
         }
 
         public async Task StartAsync()
         {
-            await ((TcpServerService)_service).StartAsync(Connection.LocalIp!, Connection.LocalPort);
+            await _service.StartAsync(Connection.LocalIp!, Connection.LocalPort);
         }
 
         public void Stop()
         {
-            ((TcpServerService)_service).Stop();
+            _service.Stop();
+            AutoSend = false;
         }
     }
 }

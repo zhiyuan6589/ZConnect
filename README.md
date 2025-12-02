@@ -7,5 +7,5 @@ This is a device connection debuging tool. Developed using .NET, C# and WPF. Key
 # Features
 - TCP  
 - UDP
-- [ ] Serial
+- Serial
 - [ ] MQTT

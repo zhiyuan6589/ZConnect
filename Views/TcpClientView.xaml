@@ -31,11 +31,11 @@
             <Label Margin="20 0 0 0" Content="Remote Port:"/>
             <TextBox Width="40" Text="{Binding Connection.RemotePort}" Style="{StaticResource VerticalCenterTextBox}"/>
 
-            <Button Margin="20 0 0 0" Content="Connect" Width="80" Click="Connect_Click"/>
-            <Button Margin="20 0 0 0" Content="Disconnect" Width="80" Click="Disconnect_Click"/>
+            <Button Margin="20 0 0 0" Content="Connect" Width="80" Click="Start_Click"/>
+            <Button Margin="20 0 0 0" Content="Disconnect" Width="80" Click="Stop_Click"/>
 
-            <Label Margin="20 0 0 0" Content="TcpStatus:"/>
-            <TextBlock Text="{Binding TcpStatus}" VerticalAlignment="Center"/>
+            <Label Margin="20 0 0 0" Content="Status:"/>
+            <TextBlock Text="{Binding Status}" VerticalAlignment="Center"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Height="auto" Margin="5 5">

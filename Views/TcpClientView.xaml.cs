@@ -10,19 +10,19 @@ namespace ZConnect.Views
     /// </summary>
     public partial class TcpClientView : UserControl
     {
-        private readonly TcpClientViewModel _vm = new(new TcpClientService());
+        private readonly TcpClientViewModel _vm = new();
         public TcpClientView()
         {
             InitializeComponent();  // Load the UI defined by the XMAL file, initialize the control object, set control object properties, event binding, etc.
             DataContext = _vm;  // Context object for data binding in WPF
         }
 
-        private async void Connect_Click(object sender, RoutedEventArgs e)  // object sender: The control object that triggered the event (button here); RoutedEventArgs: Event parameters, including event-related information (such as routing, source, etc.)
+        private async void Start_Click(object sender, RoutedEventArgs e)  // object sender: The control object that triggered the event (button here); RoutedEventArgs: Event parameters, including event-related information (such as routing, source, etc.)
         {
             await _vm.ConnectAsync();
         }
 
-        private void Disconnect_Click(object sender, RoutedEventArgs e)
+        private void Stop_Click(object sender, RoutedEventArgs e)
         {
             _vm.Disconnect();
         }
