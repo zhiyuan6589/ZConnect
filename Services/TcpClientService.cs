@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Text;
-using System.Windows.Documents;
+﻿using System.Net.Sockets;
 using ZConnect.Models;
 using ZConnect.ViewModels;
 
@@ -27,15 +23,13 @@ namespace ZConnect.Services
             {
                 await _client.ConnectAsync(ip, port);
 
-                Connection.RemoteIp = ip;
-                Connection.RemotePort = port;
                 Connection.IsConnected = true;
                 Connection.LastActiveTime = DateTime.Now;
 
                 NotifyStatus(TcpStatusEnum.Connected);
 
                 _ = ReceiveAsync(); // Start an asynchronous task. The return value is ignored, and the asynchornous method does not need to wait for completion.
-            } 
+            }
             catch
             {
                 _client?.Close();

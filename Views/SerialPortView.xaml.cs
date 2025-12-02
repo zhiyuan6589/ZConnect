@@ -5,20 +5,20 @@ using ZConnect.ViewModels;
 namespace ZConnect.Views
 {
     /// <summary>
-    /// UdpClientView.xaml 的交互逻辑
+    /// SerialPortView.xaml 的交互逻辑
     /// </summary>
-    public partial class UdpClientView : UserControl
+    public partial class SerialPortView : UserControl
     {
-        private readonly UdpClientViewModel _vm = new();
-        public UdpClientView()
+        private readonly SerialPortViewModel _vm = new();
+        public SerialPortView()
         {
             InitializeComponent();
             DataContext = _vm;
         }
 
-        private void Connect_Click(object sender, RoutedEventArgs e)  // object sender: The control object that triggered the event (button here); RoutedEventArgs: Event parameters, including event-related information (such as routing, source, etc.)
+        private void Open_Click(object sender, RoutedEventArgs e)
         {
-            _vm.Connect();
+            _vm.Open();
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -26,9 +26,9 @@ namespace ZConnect.Views
             _vm.Close();
         }
 
-        private async void Send_Click(object sender, RoutedEventArgs e)
+        private async void Write_Click(object sender, RoutedEventArgs e)
         {
-            await _vm.SendAsync();
+            await _vm.WriteAsync();
         }
 
         private void ClearText_Click(object sender, RoutedEventArgs e)

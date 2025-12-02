@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="ZConnect.Views.SerialPortView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZConnect.Views"
+             xmlns:models="clr-namespace:ZConnect.Models"
+             xmlns:services="clr-namespace:ZConnect.Services"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="900">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="DataFormatValues"
+                MethodName="GetValues"
+                ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:DataFormatEnum"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        
+        <ObjectDataProvider x:Key="AvailableSerialPorts"
+                            ObjectType="{x:Type services:SerialPortService}"
+                            MethodName="GetAvailablePorts"/>
+    </UserControl.Resources>
+
+    <Grid Margin="10" RowDefinitions="Auto,Auto,*,Auto">
+        <StackPanel Orientation="Horizontal" Margin="5 5">
+            <Label Content="PortName:"/>
+            <ComboBox Width="70" Margin="10 0 0 0"
+                      ItemsSource="{Binding Source={StaticResource AvailableSerialPorts}}"
+                      SelectedItem="{Binding Connection.PortName, Mode=TwoWay}"/>
+
+            <Label Content="BaudRate:"/>
+            <ComboBox Width="70" Margin="10 0 0 0"
+                       ItemsSource="{Binding StandardBaudRates}"
+                       SelectedItem="{Binding Connection.BaudRate, Mode=TwoWay}"/>
+
+            <Label Content="Parity:"/>
+            <ComboBox Width="70" Margin="10 0 0 0"
+                       ItemsSource="{Binding ParityValues}"
+                       SelectedItem="{Binding Connection.Parity, Mode=TwoWay}"/>
+
+            <Label Content="DataBits:"/>
+            <ComboBox Width="70" Margin="10 0 0 0"
+                       ItemsSource="{Binding DataBitsValues}"
+                       SelectedItem="{Binding Connection.DataBits, Mode=TwoWay}"/>
+
+            <Label Content="StopBits:"/>
+            <ComboBox Width="70" Margin="10 0 0 0"
+                       ItemsSource="{Binding StopBitsValues}"
+                       SelectedItem="{Binding Connection.StopBits, Mode=TwoWay}"/>
+
+            <Label Content="Handshake:"/>
+            <ComboBox Width="70" Margin="10 0 0 0"
+                       ItemsSource="{Binding HandshakeValues}"
+                       SelectedItem="{Binding Connection.Handshake, Mode=TwoWay}"/>
+
+            <Button Margin="20 0 0 0" Content="Open" Width="80" Click="Open_Click"/>
+            <Button Margin="20 0 0 0" Content="Close" Width="80" Click="Close_Click"/>
+
+            <Label Margin="20 0 0 0" Content="SerialPortStatus:"/>
+            <TextBlock Text="{Binding SerialPortStatus}" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Height="auto" Margin="5 5">
+            <ComboBox Width="65" Margin="10 0 0 0"
+              ItemsSource="{Binding Source={StaticResource DataFormatValues}}"
+              SelectedItem="{Binding ReceiveFormat, Mode=TwoWay}"
+              VerticalAlignment="Center"/>
+            <Button Margin="20 0 0 0" Content="Clear" Width="80" Click="ClearText_Click"></Button>
+        </StackPanel>
+
+        <GroupBox Header="Receive:" Grid.Row="2" Margin="5 5">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" ScrollChanged="ScrollViewer_ScrollChanged">
+                <TextBlock Text="{Binding ReceivedText}" FontFamily="Consolas" TextWrapping="Wrap"/>
+            </ScrollViewer>
+        </GroupBox>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5 5">
+            <Label Content="Send:"/>
+            <TextBox Width="500" Text="{Binding SendText}" Style="{StaticResource VerticalCenterTextBox}"/>
+
+            <ComboBox Width="65" Margin="10 0 0 0"
+              ItemsSource="{Binding Source={StaticResource DataFormatValues}}"
+              SelectedItem="{Binding SendFormat, Mode=TwoWay}"
+              VerticalAlignment="Center"/>
+
+            <CheckBox Content="AutoSend" IsChecked="{Binding AutoSend, Mode=TwoWay}"></CheckBox>
+            <TextBox Width="50" Text="{Binding IntervalMs}"/>
+            <Button Content="Send" Width="80" Margin="10 0 0 0" Click="Write_Click"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

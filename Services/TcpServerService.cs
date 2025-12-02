@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Net;
 using System.Net.Sockets;
 using ZConnect.Models;
-using System.Net;
 using ZConnect.ViewModels;
 
 namespace ZConnect.Services
@@ -30,8 +27,6 @@ namespace ZConnect.Services
                 _listener = new TcpListener(localAddr, port);
                 _listener.Start();
 
-                Connection.LocalIp = ip;
-                Connection.LocalPort = port;
                 Connection.IsListening = true;
                 Connection.IsConnected = false;
                 Connection.LastActiveTime = DateTime.Now;

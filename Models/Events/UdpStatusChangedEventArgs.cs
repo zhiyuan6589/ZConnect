@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ZConnect.Models.Events
+﻿namespace ZConnect.Models.Events
 {
     public class UdpStatusChangedEventArgs
     {

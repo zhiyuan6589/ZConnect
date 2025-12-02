@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using ZConnect.Models;
 using ZConnect.Models.Events;
 
@@ -25,16 +22,11 @@ namespace ZConnect.Services
                 _client = new UdpClient(new IPEndPoint(IPAddress.Parse(localIp), localPort));   // Bind local IP and Port by IPEndPoint.
                 _client.Connect(remoteIp, remotePort);
 
-                Connection.LocalIp = localIp;
-                Connection.LocalPort = localPort;
-                Connection.RemoteIp = remoteIp;
-                Connection.RemotePort = remotePort;
-
                 NotifyStatus(UdpStatusEnum.Started);
 
                 _cts = new CancellationTokenSource();
 
-                _ = ReceiveLoop(_cts.Token);
+                _ = ReceiveAsync(_cts.Token);
             }
             catch
             {
@@ -44,7 +36,7 @@ namespace ZConnect.Services
             }
         }
 
-        public async Task ReceiveLoop(CancellationToken token)
+        private async Task ReceiveAsync(CancellationToken token)
         {
             if (_client == null) return;
 

@@ -10,6 +10,7 @@
         <local:TcpClientView x:Key="TcpClientView"/>
         <local:TcpServerView x:Key="TcpServerView"/>
         <local:UdpClientView x:Key="UdpClientView"/>
+        <local:SerialPortView x:Key="SerialPortView"/>
     </Window.Resources>
 
     <DockPanel>
@@ -17,6 +18,7 @@
             <Button Content="TCP Server" Click="ShowTcpServer"/>
             <Button Content="TCP Client" Click="ShowTcpClient"/>
             <Button Content="UDP Client" Click="ShowUdpClient"/>
+            <Button Content="Serial Port" Click="ShowSerialPort"/>
         </StackPanel>
         <ContentControl x:Name="MainContent"/>
     </DockPanel>

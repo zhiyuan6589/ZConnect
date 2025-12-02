@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ZConnect.Models;
+﻿namespace ZConnect.Models;
 
 public enum TcpStatusEnum
 {

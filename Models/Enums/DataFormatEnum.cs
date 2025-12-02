@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ZConnect.Models;
+﻿namespace ZConnect.Models;
 
 public enum DataFormatEnum
-{ 
-    String, 
-    Hex, 
+{
+    String,
+    Hex,
     Ascii
 }

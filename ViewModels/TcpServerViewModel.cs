@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Text;
-using ZConnect.Models;
+﻿using System.Windows;
 using ZConnect.Services;
-using ZConnect.Utils;
 
 namespace ZConnect.ViewModels
 {
@@ -18,7 +11,13 @@ namespace ZConnect.ViewModels
     {
         public TcpServerViewModel(TcpServerService service) : base(service)
         {
-            service.StatusChanged += OnStatusChanged;
+            service.StatusChanged += (s, e) =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    OnStatusChanged(s, e);
+                });
+            };
         }
 
         public async Task StartAsync()

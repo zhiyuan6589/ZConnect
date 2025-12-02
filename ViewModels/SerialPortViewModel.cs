@@ -1,28 +1,33 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.DirectoryServices.ActiveDirectory;
+using System.IO.Ports;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Windows;
 using ZConnect.Models;
-using ZConnect.Models.Events;
 using ZConnect.Services;
 using ZConnect.Utils;
 
 namespace ZConnect.ViewModels
 {
-    public class UdpClientViewModel : INotifyPropertyChanged
+    public class SerialPortViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
-        private readonly UdpClientService _service = new();
+        private readonly SerialPortService _service = new();
 
-        public UdpConnectionModel Connection => _service.Connection;
+        public SerialPortConnectionModel Connection => _service.Connection;
 
-        private string _udpStatus = "Stopped";
-        public string UdpStatus
+        private string _serialPortStatus = "Closed";
+        public string SerialPortStatus
         {
-            get => _udpStatus;
-            set { _udpStatus = value; OnPropertyChanged(); }
+            get => _serialPortStatus;
+            set { _serialPortStatus = value; OnPropertyChanged(); }
         }
 
         private string _receivedText = "";
@@ -58,36 +63,52 @@ namespace ZConnect.ViewModels
             set { _intervalMs = value; OnPropertyChanged(); }
         }
 
-        public UdpClientViewModel()
+        public ObservableCollection<int> StandardBaudRates { get; } = new ObservableCollection<int>     // todo
+        {
+            110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 56000, 57600, 115200, 230400, 256000, 460800, 500000, 512000, 600000, 750000, 921600
+        };
+
+        public ObservableCollection<Parity> ParityValues { get; } =     // todo
+            new ObservableCollection<Parity>((Parity[])Enum.GetValues(typeof(Parity)));
+
+        public ObservableCollection<int> DataBitsValues { get; } = new ObservableCollection<int>
+        {
+            5, 6, 7, 8
+        };
+
+        public Array StopBitsValues { get; } = Enum.GetValues(typeof(StopBits));
+
+        public Array HandshakeValues { get; } = Enum.GetValues(typeof(Handshake));
+        
+        public SerialPortViewModel()
         {
             _service.StatusChanged += (s, e) =>
             {
-                Application.Current.Dispatcher.Invoke(() =>
+                Application.Current.Dispatcher.BeginInvoke(() =>
                 {
                     OnStatusChanged(s, e);
                 });
             };
         }
 
-        protected void OnStatusChanged(object? sender, UdpStatusChangedEventArgs args)
+        protected void OnStatusChanged(object? sender, SerialPortStatusChangedEventArgs args)
         {
-            if (args.StatusType == UdpStatusEnum.DataReceived && args.Data != null)
+            if (args.StatusType == SerialPortStatusEnum.DataReceived && args.Data != null)
             {
                 string text = FormatConverter.ConvertReceived(args.Data, ReceiveFormat);
                 ReceivedText += $"[Recv {DateTime.Now:HH:mm:ss}] {text}\n";
             }
 
-            UdpStatus = args.StatusType.ToString();
+            SerialPortStatus = args.StatusType.ToString();
         }
 
-        public void Connect()
+        public void Open()
         {
-            if (string.IsNullOrEmpty(Connection.LocalIp) || string.IsNullOrEmpty(Connection.RemoteIp))
-                throw new InvalidOperationException("Local/Remote IP must be set.");
-            _service.Connect(Connection.LocalIp, Connection.LocalPort, Connection.RemoteIp, Connection.RemotePort);
+            if ((!string.IsNullOrEmpty(Connection.PortName)) && (SerialPortStatus != "Opened"))
+                _service.Open(Connection.PortName, Connection.BaudRate, Connection.Parity, Connection.DataBits, Connection.StopBits, Connection.Handshake);
         }
 
-        public async Task SendAsync()
+        public async Task WriteAsync()
         {
             if (_isAutoSending) return;
             if (string.IsNullOrEmpty(SendText)) return;
@@ -97,10 +118,10 @@ namespace ZConnect.ViewModels
             _isAutoSending = AutoSend;
             do
             {
-                await _service.SendAsync(data);
+                await _service.WriteAsync(data);
                 ReceivedText += $"[Send {DateTime.Now:HH:mm:ss}] {FormatConverter.ConvertReceived(data, SendFormat)}\n";    // The recived/send text record.
                 if (!AutoSend) break;
-                await Task.Delay(IntervalMs);
+                await Task.Delay(IntervalMs).ConfigureAwait(false);     // There is no switch back to the UI thread. Each loop only returns to the UI thread after writing data and updating the UI.
             } while (AutoSend);
             _isAutoSending = false;
         }
@@ -108,6 +129,7 @@ namespace ZConnect.ViewModels
         public void Close()
         {
             _service.Close();
+            ReceivedText = "";
         }
 
         public void ClearText()

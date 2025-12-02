@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace ZConnect.Models;
 
-namespace ZConnect.Models
+public enum UdpStatusEnum
 {
-    public enum UdpStatusEnum
-    {
-        Started,
-        Stopped,
-        DataReceived,
-        DataSent,
-        Error,
-    }
+    Started,
+    Stopped,
+    DataReceived,
+    DataSent,
+    Error,
 }
