@@ -2,6 +2,10 @@
 
 namespace ZConnect.Models
 {
+    /// <summary>
+    /// UDP connection data model.
+    /// Store local/remote ip and port, and send/receive data.
+    /// </summary>
     public class UdpConnectionModel
     {
         // Local Info
@@ -14,6 +18,7 @@ namespace ZConnect.Models
 
         public IPEndPoint? RemoteIpEndPoint;
 
+        // Send/Receive Info
         public byte[]? LastSent { get; set; }
         public byte[]? LastReceived { get; set; }
         public DateTime LastActiveTime { get; set; }

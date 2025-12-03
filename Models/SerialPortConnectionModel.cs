@@ -2,8 +2,13 @@
 
 namespace ZConnect.Models
 {
+    /// <summary>
+    /// Serial port connection data model.
+    /// Store portname/baudrate/parity/databits/stopbits/handshake, and last sent/received data.
+    /// </summary>
     public class SerialPortConnectionModel
     {
+        // Serial Port Info
         public string? PortName { get; set; }
         public int BaudRate { get; set; } = 115200;
         public Parity Parity { get; set; } = Parity.None;    // 校验方式，枚举类型
@@ -11,6 +16,7 @@ namespace ZConnect.Models
         public StopBits StopBits { get; set; } = StopBits.One;   // 停止位，枚举类型
         public Handshake Handshake { get; set; } = Handshake.None; // 流控制，枚举类型
 
+        // Send/Receive Info
         public byte[]? LastSent { get; set; }
         public byte[]? LastReceived { get; set; }
         public DateTime LastActiveTime { get; set; }

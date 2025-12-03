@@ -13,22 +13,15 @@ namespace ZConnect.ViewModels
 
         public SerialPortConnectionModel Connection => _service.Connection;
 
-        public ObservableCollection<int> StandardBaudRates { get; } =   // Data binding and dynamic UI refresh.
-        [
-            110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 56000, 57600, 115200, 230400, 256000, 460800, 500000, 512000, 600000, 750000, 921600
-        ];
+        public int[] StandardBaudRates { get; } = [110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 56000, 57600, 115200, 230400, 256000, 460800, 500000, 512000, 600000, 750000, 921600];
 
-        public ObservableCollection<Parity> ParityValues { get; } =
-            new ObservableCollection<Parity>((Parity[])Enum.GetValues(typeof(Parity)));
+        public Array ParityValues { get; } = Enum.GetValues<Parity>();
 
-        public ObservableCollection<int> DataBitsValues { get; } =
-        [
-            5, 6, 7, 8
-        ];
+        public int[] DataBitsValues { get; } = [5, 6, 7, 8];
 
-        public Array StopBitsValues { get; } = Enum.GetValues(typeof(StopBits));
+        public Array StopBitsValues { get; } = Enum.GetValues<StopBits>();
 
-        public Array HandshakeValues { get; } = Enum.GetValues(typeof(Handshake));
+        public Array HandshakeValues { get; } = Enum.GetValues<Handshake>();
 
         public SerialPortViewModel()
         {

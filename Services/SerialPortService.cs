@@ -5,7 +5,7 @@ namespace ZConnect.Services
 {
     public class SerialPortService
     {
-        public SerialPortConnectionModel Connection { get; } = new SerialPortConnectionModel();
+        public SerialPortConnectionModel Connection { get; } = new();
 
         public event EventHandler<SerialPortStatusChangedEventArgs>? StatusChanged;
 
