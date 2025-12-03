@@ -1,13 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.Input;
 using System.IO.Ports;
 using System.Windows;
 using ZConnect.Models;
 using ZConnect.Services;
-using ZConnect.Utils;
 
 namespace ZConnect.ViewModels
 {
-    public class SerialPortViewModel : BaseCommunicationViewModel
+    public partial class SerialPortViewModel : BaseCommunicationViewModel
     {
         private readonly SerialPortService _service = new();
 
@@ -35,13 +34,15 @@ namespace ZConnect.ViewModels
             };
         }
 
-        public void Open()
+        [RelayCommand]
+        private void Open()
         {
             if ((!string.IsNullOrEmpty(Connection.PortName)) && (Status != "Opened"))
                 _service.Open(Connection.PortName, Connection.BaudRate, Connection.Parity, Connection.DataBits, Connection.StopBits, Connection.Handshake);
         }
 
-        public void Close()
+        [RelayCommand]
+        private void Close()
         {
             _service.Close();
             AutoSend = false;

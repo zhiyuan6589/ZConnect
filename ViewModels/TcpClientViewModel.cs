@@ -1,7 +1,7 @@
-﻿using System.Windows;
+﻿using CommunityToolkit.Mvvm.Input;
+using System.Windows;
 using ZConnect.Models;
 using ZConnect.Services;
-using ZConnect.Utils;
 
 namespace ZConnect.ViewModels
 {
@@ -9,7 +9,7 @@ namespace ZConnect.ViewModels
     /// Tcp client ViewModel.
     /// Used to bind logic to UI.
     /// </summary>
-    public class TcpClientViewModel : BaseCommunicationViewModel
+    public partial class TcpClientViewModel : BaseCommunicationViewModel
     {
         private readonly TcpClientService _service = new();
 
@@ -27,12 +27,14 @@ namespace ZConnect.ViewModels
             };
         }
 
-        public async Task ConnectAsync()
+        [RelayCommand]
+        private async Task Connect()
         {
             await _service.ConnectAsync(Connection.RemoteIp!, Connection.RemotePort);   // ((TcpClientService)_service): Convert the type of _service to TcpClientService type.
         }
 
-        public void Disconnect()
+        [RelayCommand]
+        private void Disconnect()
         {
             _service.Disconnect();
             AutoSend = false;

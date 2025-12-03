@@ -55,8 +55,8 @@
                        ItemsSource="{Binding HandshakeValues}"
                        SelectedItem="{Binding Connection.Handshake, Mode=TwoWay}"/>
 
-            <Button Margin="20 0 0 0" Content="Open" Width="80" Click="Start_Click"/>
-            <Button Margin="20 0 0 0" Content="Close" Width="80" Click="Stop_Click"/>
+            <Button Margin="20 0 0 0" Content="Open" Width="80" Command="{Binding OpenCommand}"/>
+            <Button Margin="20 0 0 0" Content="Close" Width="80" Command="{Binding CloseCommand}"/>
 
             <Label Margin="20 0 0 0" Content="Status:"/>
             <TextBlock Text="{Binding Status}" VerticalAlignment="Center"/>
@@ -67,7 +67,7 @@
               ItemsSource="{Binding Source={StaticResource DataFormatValues}}"
               SelectedItem="{Binding ReceiveFormat, Mode=TwoWay}"
               VerticalAlignment="Center"/>
-            <Button Margin="20 0 0 0" Content="Clear" Width="80" Click="ClearText_Click"></Button>
+            <Button Margin="20 0 0 0" Content="Clear" Width="80" Command="{Binding ClearTextCommand}"></Button>
         </StackPanel>
 
         <GroupBox Header="Receive:" Grid.Row="2" Margin="5 5">
@@ -87,7 +87,7 @@
 
             <CheckBox Content="AutoSend" IsChecked="{Binding AutoSend, Mode=TwoWay}"></CheckBox>
             <TextBox Width="50" Text="{Binding IntervalMs}"/>
-            <Button Content="Send" Width="80" Margin="10 0 0 0" Click="Send_Click"/>
+            <Button Content="Send" Width="80" Margin="10 0 0 0" Command="{Binding SendCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -16,26 +16,6 @@ namespace ZConnect.Views
             DataContext = _vm;
         }
 
-        private void Start_Click(object sender, RoutedEventArgs e)
-        {
-            _vm.Open();
-        }
-
-        private void Stop_Click(object sender, RoutedEventArgs e)
-        {
-            _vm.Close();
-        }
-
-        private async void Send_Click(object sender, RoutedEventArgs e)
-        {
-            await _vm.SendAsync();
-        }
-
-        private void ClearText_Click(object sender, RoutedEventArgs e)
-        {
-            _vm.ClearText();
-        }
-
         private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             var sv = sender as ScrollViewer;
