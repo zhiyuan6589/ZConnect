@@ -4,7 +4,7 @@
 
 这是一个设备连接调试工具，使用 .NET、C# 和 WPF 开发。主要功能包括 TCP/UDP、串口协议的连接调试。
 
----
+
 
 ## 功能
 
@@ -12,7 +12,7 @@
 - UDP 客户端 - 发送和接收 UDP 数据包进行测试。
 - 串口 - 通过串口连接并调试设备。
 
----
+
 
 ## 技术栈
 
@@ -20,14 +20,14 @@
 - **C# 14**
 - **WPF (Windows Presentation Foundation)**
 
----
+
 
 ## 安装
 
 1. 从 [Releases](https://github.com/zhiyuan6589/ZConnect/releases) 页面下载最新版本。
 2. 运行安装程序（例如 `ZConnectionInstaller_vX.X.X.exe`）并按照安装步骤完成安装。
 
----
+
 
 ## 使用说明
 
@@ -37,7 +37,7 @@
 4. 打开连接开始收发数据。
 5. 在主面板中监控接收到的消息。
 
----
+
 
 ## 贡献
 
@@ -45,7 +45,7 @@
 - 通过 Discussions 或 Issues 提出功能建议
 - 提交 Pull Request 修复 bug 或改进功能
 
----
+
 
 ## 许可证
 

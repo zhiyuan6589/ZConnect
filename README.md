@@ -4,7 +4,7 @@ For Chinese version, see [README_zh.md](README_zh.md)
 
 This is a device connection debugging tool. Developed using .NET, C# and WPF. Key features include connection debugging for TCP/UDP, Serial protocols.
 
----
+
 
 ## Features
 
@@ -12,7 +12,7 @@ This is a device connection debugging tool. Developed using .NET, C# and WPF. Ke
 - **UDP Client** - Send and receive UDP packets for testing.
 - **Serial** - Connect and debug devices via serial ports.
 
----
+
 
 ## Tech Stack
 
@@ -20,14 +20,14 @@ This is a device connection debugging tool. Developed using .NET, C# and WPF. Ke
 - **C# 14**
 - **WPF (Windows Presentation Foundation)**
 
----
+
 
 ## Installation
 
 Download the latest release the [Releases](https://github.com/zhiyuan6589/ZConnect/releases) page.
 Run the installer (`ZConnectionInstaller_vX.X.X.exe`) and follow the installation steps.
 
----
+
 
 ## Usage
 
@@ -37,7 +37,7 @@ Run the installer (`ZConnectionInstaller_vX.X.X.exe`) and follow the installatio
 4. Open the connection to start sending and receiving data.
 5. Monitor received messages in the main panel.
 
----
+
 
 ## Contributing
 
@@ -45,7 +45,7 @@ Run the installer (`ZConnectionInstaller_vX.X.X.exe`) and follow the installatio
 - Suggesting features via Discussions or Issues
 - Submitting pull requests for bug fixes or improvements
 
----
+
 
 ## License
 
