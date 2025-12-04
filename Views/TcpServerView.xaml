@@ -18,53 +18,54 @@
         </ObjectDataProvider>
     </UserControl.Resources>
 
-    <Grid Margin="10" RowDefinitions="Auto,Auto,*,Auto">
-        <!--Margin="10,10,10,10"-->
-        <!--Margin="Left,Top,Right,Bottom"-->
-        <!--RowDefinitions: Auto:Height adaptable to content; *:Take up remaining space-->
-        <StackPanel Orientation="Horizontal" Margin="5 5">
-            <Label Content="Local IP:"/>
-            <!--Margin="5 0"-->
-            <!--Margin="Left&Right Top&Bottom"-->
-            <TextBox Width="70" Text="{Binding Connection.LocalIp}" Style="{StaticResource VerticalCenterTextBox}"/>
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="200"/>
+            <ColumnDefinition MinWidth="500"/>
+        </Grid.ColumnDefinitions>
 
-            <Label Margin="20 0 0 0" Content="Local Port:"/>
-            <TextBox Width="40" Text="{Binding Connection.LocalPort}" Style="{StaticResource VerticalCenterTextBox}"/>
+        <Grid Grid.Column="0" Grid.IsSharedSizeScope="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
 
-            <Button Margin="20 0 0 0" Content="Start" Width="80" Command="{Binding StartCommand}"/>
-            <Button Margin="20 0 0 0" Content="Stop" Width="80" Command="{Binding StopCommand}"/>
-            
-            <Label Margin="20 0 0 0" Content="Status:"/>
-            <TextBlock Text="{Binding Status}" VerticalAlignment="Center"/>
-        </StackPanel>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Height="auto" Margin="5 5">
-            <ComboBox Width="65" Margin="10 0 0 0"
-                      ItemsSource="{Binding Source={StaticResource DataFormatValues}}"
-                      SelectedItem="{Binding ReceiveFormat, Mode=TwoWay}"
-                      VerticalAlignment="Center"/>
-            <Button Margin="20 0 0 0" Content="Clear" Width="80" Command="{Binding ClearTextCommand}"></Button>
-        </StackPanel>
+            <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Margin="10" HorizontalContentAlignment ="Center" Content="Tcp Server" FontSize="20" FontWeight="Bold"/>
 
-        <GroupBox Header="Receive:" Grid.Row="2" Margin="5 5">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" ScrollChanged="ScrollViewer_ScrollChanged">
-                <TextBlock Text="{Binding ReceivedText}" FontFamily="Consolas" TextWrapping="Wrap"/>
-                <!--TextWrapping="Wrap": Automatically wrap text when it exceeds the width of the control-->
-            </ScrollViewer>
-        </GroupBox>
+            <Label Grid.Column="0" Grid.Row="1" Margin="0 5 0 5" Content="Local IP:" />
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="10 5 0 5"
+                 Text="{Binding Connection.LocalIp}" 
+                 Style="{StaticResource VerticalCenterTextBox}"/>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="5 5">
-            <Label Content="Send:"/>
-            <TextBox Width="500" Text="{Binding SendText}" Style="{StaticResource VerticalCenterTextBox}"/>
+            <Label Grid.Column="0" Grid.Row="2" Margin="0 5 0 5" Content="Local Port:"/>
+            <TextBox Grid.Column="1" Grid.Row="2" Margin="10 5 0 5"
+                 Text="{Binding Connection.LocalPort}" 
+                 Style="{StaticResource VerticalCenterTextBox}"/>
 
-            <ComboBox Width="65" Margin="10 0 0 0"
-                      ItemsSource="{Binding Source={StaticResource DataFormatValues}}"
-                      SelectedItem="{Binding SendFormat, Mode=TwoWay}"
-                      VerticalAlignment="Center"/>
+            <Label Grid.Column="0" Grid.Row="7" Margin="0 5 0 5" Content="Status:"/>
+            <TextBlock Grid.Column="1" Grid.Row="7" Width="80" Margin="10 5 0 5" 
+                  Text="{Binding Status}" VerticalAlignment="Center"/>
 
-            <CheckBox Content="AutoSend" IsChecked="{Binding AutoSend, Mode=TwoWay}"></CheckBox>
-            <TextBox Width="50" Text="{Binding IntervalMs}"/>
-            <Button Content="Send" Width="80" Margin="10 0 0 0" Command="{Binding SendCommand}"/>
-        </StackPanel>
+            <Button  Grid.Column="0" Grid.Row="8" Width="80" 
+                 Content="Start" Command="{Binding StartCommand}"/>
+            <Button Grid.Column="1" Grid.Row="8" Width="80" 
+                Content="Stop" Command="{Binding StopCommand}"/>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <local:CommonPanelView DataContext="{Binding}"/>
+        </Grid>
     </Grid>
 </UserControl>

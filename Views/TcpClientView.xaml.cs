@@ -16,15 +16,5 @@ namespace ZConnect.Views
             InitializeComponent();  // Load the UI defined by the XMAL file, initialize the control object, set control object properties, event binding, etc.
             DataContext = _vm;  // Context object for data binding in WPF
         }
-
-        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            var sv = sender as ScrollViewer;
-
-            if (e.ExtentHeightChange > 0)
-            {
-                sv?.ScrollToEnd();
-            }
-        }
     }
 }

@@ -5,21 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZConnect.Views"
         mc:Ignorable="d"
-        Title="ZConnect" Height="600" Width="1000">
+        Title="ZConnect" Height="530" Width="770">
     <Window.Resources>
-        <local:TcpClientView x:Key="TcpClientView"/>
         <local:TcpServerView x:Key="TcpServerView"/>
+        <local:TcpClientView x:Key="TcpClientView"/>
         <local:UdpClientView x:Key="UdpClientView"/>
         <local:SerialPortView x:Key="SerialPortView"/>
     </Window.Resources>
 
-    <DockPanel>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-            <Button Content="TCP Server" Click="ShowTcpServer"/>
-            <Button Content="TCP Client" Click="ShowTcpClient"/>
-            <Button Content="UDP Client" Click="ShowUdpClient"/>
-            <Button Content="Serial Port" Click="ShowSerialPort"/>
-        </StackPanel>
-        <ContentControl x:Name="MainContent"/>
-    </DockPanel>
+    <Grid>
+        <TabControl>
+            <TabItem Header="Tcp Server">
+                <ContentControl Content="{StaticResource TcpServerView}"/>
+            </TabItem>
+
+            <TabItem Header="Tcp Client">
+                <ContentControl Content="{StaticResource TcpClientView}"/>
+            </TabItem>
+
+            <TabItem Header="Udp Client">
+                <ContentControl Content="{StaticResource UdpClientView}"/>
+            </TabItem>
+
+            <TabItem Header="Serial Port">
+                <ContentControl Content="{StaticResource SerialPortView}"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </Window>
