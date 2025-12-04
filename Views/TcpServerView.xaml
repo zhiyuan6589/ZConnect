@@ -20,8 +20,8 @@
 
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="200"/>
-            <ColumnDefinition MinWidth="500"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0" Grid.IsSharedSizeScope="True">

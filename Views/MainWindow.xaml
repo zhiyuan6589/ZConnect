@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZConnect.Views"
         mc:Ignorable="d"
-        Title="ZConnect" Height="530" Width="770">
+        Title="ZConnect" Height="530" Width="780" 
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResizeWithGrip"
+        Icon="pack://application:,,,/ZConnect;component/Resources/logo.ico">
+    
     <Window.Resources>
         <local:TcpServerView x:Key="TcpServerView"/>
         <local:TcpClientView x:Key="TcpClientView"/>

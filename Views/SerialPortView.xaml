@@ -17,7 +17,7 @@
                 <x:Type TypeName="models:DataFormatEnum"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-        
+
         <ObjectDataProvider x:Key="AvailableSerialPorts"
                             ObjectType="{x:Type services:SerialPortService}"
                             MethodName="GetAvailablePorts"/>
@@ -25,8 +25,8 @@
 
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="200"/>
-            <ColumnDefinition MinWidth="500"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0" Grid.IsSharedSizeScope="True">
@@ -48,7 +48,7 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Margin="10" HorizontalContentAlignment ="Center" Content="Serial Port" FontSize="20" FontWeight="Bold"/>
-            
+
             <Label Grid.Column="0" Grid.Row="1" Margin="0 5 0 5" Content="PortName:" />
             <ComboBox Grid.Column="1" Grid.Row="1" Margin="10 5 0 5"
                       ItemsSource="{Binding Source={StaticResource AvailableSerialPorts}}"

@@ -3,3 +3,6 @@ obj/
 .vs/
 *.csproj.user
 *.user
+publish/
+Properties/
+Output/
